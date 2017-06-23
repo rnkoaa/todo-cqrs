@@ -1,6 +1,7 @@
-package com.todo.cqrs.todo;
+package com.todo.cqrs.todo.event;
 
 import com.todo.cqrs.lib.DomainEvent;
+import com.todo.cqrs.todo.TodoId;
 
 import java.time.LocalDateTime;
 

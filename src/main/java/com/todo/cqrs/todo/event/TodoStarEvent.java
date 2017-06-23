@@ -1,6 +1,7 @@
-package com.todo.cqrs.todo;
+package com.todo.cqrs.todo.event;
 
 import com.todo.cqrs.lib.DomainEvent;
+import com.todo.cqrs.todo.TodoId;
 
 /**
  * Created by 6/22/17.

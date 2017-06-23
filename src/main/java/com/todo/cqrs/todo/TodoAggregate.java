@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todo.cqrs.lib.AggregateRoot;
 import com.todo.cqrs.todo.command.*;
+import com.todo.cqrs.todo.event.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
