@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
 import com.google.common.eventbus.EventBus;
+import com.todo.cqrs.lib.command.CommandBus;
+import com.todo.cqrs.lib.command.SimpleCommandBus;
 import com.todo.cqrs.lib.util.JSR310DateTimeSerializer;
 import com.todo.cqrs.lib.util.JSR310LocalDateDeserializer;
 import com.todo.cqrs.lib.util.JSR310LocalDateTimeConverters;
@@ -33,6 +35,10 @@ public class TodoCqrsApplication {
         return new EventBus("commandEventBus");
     }
 
+    @Bean
+    public CommandBus commandBus(){
+        return new SimpleCommandBus("simpleCommandBus");
+    }
     @Bean
     @Primary
     public ObjectMapper objectMapper() {

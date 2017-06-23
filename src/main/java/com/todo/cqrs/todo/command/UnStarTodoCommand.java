@@ -1,6 +1,6 @@
 package com.todo.cqrs.todo.command;
 
-import com.todo.cqrs.lib.Command;
+import com.todo.cqrs.lib.command.Command;
 import com.todo.cqrs.todo.TodoId;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

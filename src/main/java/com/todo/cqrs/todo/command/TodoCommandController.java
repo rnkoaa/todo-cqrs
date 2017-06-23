@@ -1,6 +1,6 @@
 package com.todo.cqrs.todo.command;
 
-import com.todo.cqrs.lib.CommandSender;
+import com.todo.cqrs.lib.CommandGateway;
 import com.todo.cqrs.todo.TodoDto;
 import com.todo.cqrs.todo.TodoId;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +15,10 @@ import java.net.URI;
 @RequestMapping("/todos")
 public class TodoCommandController {
 
-    private final CommandSender commandSender;
+    private final CommandGateway commandGateway;
 
-    public TodoCommandController(CommandSender commandSender) {
-        this.commandSender = commandSender;
+    public TodoCommandController(CommandGateway commandGateway) {
+        this.commandGateway = commandGateway;
     }
 
 
@@ -31,7 +31,7 @@ public class TodoCommandController {
                 .description(todoDto.getDescription())
                 .build();
 
-        commandSender.send(createTodoCommand);
+        commandGateway.send(createTodoCommand);
         return ResponseEntity.created(URI.create("/todos/aggregates/" + todoId.id)).build();
     }
 
@@ -43,7 +43,7 @@ public class TodoCommandController {
                 .description(todoDto.getDescription())
                 .todoId(new TodoId(todoId))
                 .build();
-        commandSender.send(updateCommand);
+        commandGateway.send(updateCommand);
         return ResponseEntity.noContent().build();
     }
 
@@ -53,7 +53,7 @@ public class TodoCommandController {
         DeleteTodoCommand updateCommand = DeleteTodoCommand.builder()
                 .todoId(new TodoId(todoId))
                 .build();
-        commandSender.send(updateCommand);
+        commandGateway.send(updateCommand);
         return ResponseEntity.noContent().build();
     }
 
@@ -63,7 +63,7 @@ public class TodoCommandController {
         StarTodoCommand updateCommand = StarTodoCommand.builder()
                 .todoId(new TodoId(todoId))
                 .build();
-        commandSender.send(updateCommand);
+        commandGateway.send(updateCommand);
         return ResponseEntity.noContent().build();
     }
 
@@ -73,7 +73,7 @@ public class TodoCommandController {
         UnStarTodoCommand updateCommand = UnStarTodoCommand.builder()
                 .todoId(new TodoId(todoId))
                 .build();
-        commandSender.send(updateCommand);
+        commandGateway.send(updateCommand);
         return ResponseEntity.noContent().build();
     }
 }
