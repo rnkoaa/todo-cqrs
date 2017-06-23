@@ -30,11 +30,6 @@ public class TodoAggregate extends AggregateRoot<TodoId> {
     private boolean deleted;
     private boolean starred;
 
-    @JsonProperty("id")
-    public String getId() {
-        return id.id;
-    }
-
     //for JPA
     @Tolerate
     public TodoAggregate() {
@@ -45,16 +40,25 @@ public class TodoAggregate extends AggregateRoot<TodoId> {
         applyChange(new TodoCreatedEvent(command.getTodoId(), nextVersion(), command.getDescription(), now()));
     }
 
+    @JsonProperty("id")
+    public String getId() {
+        return id.id;
+    }
+
     void handleEvent(TodoCreatedEvent event) {
         this.id = event.getAggregateId();
         this.description = event.getDescription();
     }
 
     void handleEvent(TodoCompletedEvent event) {
+        if (isDeleted())
+            throw new InvalidTodoStateException("Cannot complete a deleted Todo.");
         this.completedOn = LocalDateTime.now();
     }
 
     void handleEvent(UpdateTodoDescriptionCommand event) {
+        if (isDeleted())
+            throw new InvalidTodoStateException("Cannot update the description of a deleted Todo.");
         this.description = event.getDescription();
     }
 
@@ -63,6 +67,8 @@ public class TodoAggregate extends AggregateRoot<TodoId> {
     }
 
     void handleEvent(TodoStarEvent event) {
+        if (isDeleted())
+            throw new InvalidTodoStateException("Cannot star a deleted Todo.");
         this.starred = event.isStarred();
     }
 

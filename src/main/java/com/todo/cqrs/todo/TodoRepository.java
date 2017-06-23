@@ -1,5 +1,6 @@
 package com.todo.cqrs.todo;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -11,4 +12,8 @@ public interface TodoRepository {
     Optional<TodoAggregate> find(TodoId todoId);
 
     Optional<TodoAggregate> find(String todoId);
+
+    Optional<TodoAggregate> findWithEvents(String todoId);
+
+    List<TodoAggregate> allAggregates();
 }

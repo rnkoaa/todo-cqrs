@@ -46,8 +46,39 @@ public class InMemoryTodoRepositoryImpl implements TodoRepository {
     public Optional<TodoAggregate> find(String todoId) {
         return inMemoryTodoAggregates.stream()
                 .filter(todoAggregate1 -> todoAggregate1.getId().equals(todoId))
+                .map(todoAggregate -> TodoAggregate.builder()
+                        .id(todoAggregate.id())
+                        .description(todoAggregate.getDescription())
+                        .deleted(todoAggregate.isDeleted())
+                        .createdAt(todoAggregate.getCreatedAt())
+                        .completedOn(todoAggregate.getCompletedOn())
+                        .starred(todoAggregate.isStarred())
+                        .build())
                 .findFirst();
 
+    }
+
+    @Override
+    public Optional<TodoAggregate> findWithEvents(String todoId) {
+        return inMemoryTodoAggregates.stream()
+                .filter(todoAggregate1 -> todoAggregate1.getId().equals(todoId))
+                .findFirst();
+
+    }
+
+    @Override
+    public List<TodoAggregate> allAggregates() {
+        return inMemoryTodoAggregates
+                .stream()
+                .map(todoAggregate -> TodoAggregate.builder()
+                        .id(todoAggregate.id())
+                        .description(todoAggregate.getDescription())
+                        .deleted(todoAggregate.isDeleted())
+                        .createdAt(todoAggregate.getCreatedAt())
+                        .completedOn(todoAggregate.getCompletedOn())
+                        .starred(todoAggregate.isStarred())
+                        .build())
+                .collect(Collectors.toList());
     }
 
 }

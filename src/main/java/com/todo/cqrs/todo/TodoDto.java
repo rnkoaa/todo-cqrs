@@ -14,6 +14,8 @@ import lombok.Data;
 @AllArgsConstructor
 @JsonDeserialize(builder = TodoDto.TodoDtoBuilder.class)
 public class TodoDto {
+    private boolean deleted;
+    private boolean starred;
     private String description;
 
 
