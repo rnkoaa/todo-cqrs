@@ -5,5 +5,4 @@ package com.todo.cqrs.lib;
  */
 public interface CommandHandler {
 
-    void handle(Command command);
 }

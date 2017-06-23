@@ -1,0 +1,15 @@
+```yaml
+AggregateRoot
+  Todo:
+    commands:
+      AddTodo
+      CompleteTodo
+      showSince
+      editTodo
+      removeCompleted
+    events:
+      onTodoAdded
+      onTodoCompleted
+      onTitleUpdated
+      onCompletedTodosRemoved
+```

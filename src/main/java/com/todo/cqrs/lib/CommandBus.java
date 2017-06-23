@@ -5,5 +5,8 @@ package com.todo.cqrs.lib;
  */
 public interface CommandBus {
 
-    void send(Command command);
+
+    void dispatch(Command command);
+
+    <T extends CommandHandler> T register(T handler);
 }

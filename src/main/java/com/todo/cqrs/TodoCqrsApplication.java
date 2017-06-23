@@ -6,13 +6,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
+import com.google.common.eventbus.EventBus;
 import com.todo.cqrs.lib.util.JSR310DateTimeSerializer;
 import com.todo.cqrs.lib.util.JSR310LocalDateDeserializer;
 import com.todo.cqrs.lib.util.JSR310LocalDateTimeConverters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Scope;
 
 import java.time.*;
 
@@ -21,6 +26,11 @@ public class TodoCqrsApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(TodoCqrsApplication.class, args);
+    }
+
+    @Bean
+    public EventBus commandEventBus() {
+        return new EventBus("commandEventBus");
     }
 
     @Bean
@@ -46,4 +56,10 @@ public class TodoCqrsApplication {
         objectMapper.registerModule(module);
         return objectMapper;
     }
+/*
+    @Bean
+    @Scope("prototype")
+    public Logger logger(InjectionPoint injectionPoint){
+        return LoggerFactory.getLogger(injectionPoint.getMethodParameter().getContainingClass());
+    }*/
 }
