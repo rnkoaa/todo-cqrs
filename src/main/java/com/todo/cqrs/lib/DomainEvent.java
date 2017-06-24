@@ -1,5 +1,7 @@
 package com.todo.cqrs.lib;
 
+import com.todo.cqrs.todo.event.TodoEvent;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -11,11 +13,17 @@ public abstract class DomainEvent<T extends ValueId> implements Serializable {
     private final T aggregateId;
     private final int version;
     private final long timestamp;
+    private final TodoEvent eventType;
 
-    protected DomainEvent(T aggregateId, int version, long timestamp) {
+    protected DomainEvent(T aggregateId, int version, long timestamp, TodoEvent eventType) {
         this.aggregateId = aggregateId;
         this.version = version;
         this.timestamp = timestamp;
+        this.eventType = eventType;
+    }
+
+    public TodoEvent getEventType() {
+        return eventType;
     }
 
     @Override

@@ -3,6 +3,8 @@ package com.todo.cqrs.todo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.todo.cqrs.lib.AggregateRoot;
+import com.todo.cqrs.lib.DomainEvent;
+import com.todo.cqrs.lib.ValueId;
 import com.todo.cqrs.todo.command.*;
 import com.todo.cqrs.todo.event.*;
 import lombok.AllArgsConstructor;
@@ -62,6 +64,7 @@ public class TodoAggregate extends AggregateRoot<TodoId> {
         this.description = event.getDescription();
     }
 
+
     void handleEvent(TodoDeletedEvent event) {
         this.deleted = true;
     }
@@ -73,22 +76,22 @@ public class TodoAggregate extends AggregateRoot<TodoId> {
     }
 
     public void updateDescription(UpdateTodoDescriptionCommand command) {
-        applyChange(new TodoDescriptionUpdatedEvent(command.getTodoId(), nextVersion(), command.getDescription(), now()));
+        applyChange(new TodoDescriptionUpdatedEvent(command.getTodoId(), this.version(), command.getDescription(), now()));
     }
 
     public void completeTodo(CompleteTodoCommand command) {
-        applyChange(new TodoCompletedEvent(command.getTodoId(), nextVersion(), now()));
+        applyChange(new TodoCompletedEvent(command.getTodoId(), version(), now()));
     }
 
     public void deleteTodo(DeleteTodoCommand command) {
-        applyChange(new TodoDeletedEvent(command.getTodoId(), nextVersion(), now()));
+        applyChange(new TodoDeletedEvent(command.getTodoId(), version(), now()));
     }
 
     public void starTodo(StarTodoCommand command) {
-        applyChange(new TodoStarEvent(command.getTodoId(), nextVersion(), now(), true));
+        applyChange(new TodoStarEvent(command.getTodoId(), version(), now(), true));
     }
 
     public void unStarTodo(UnStarTodoCommand command) {
-        applyChange(new TodoStarEvent(command.getTodoId(), nextVersion(), now(), false));
+        applyChange(new TodoStarEvent(command.getTodoId(), version(), now(), false));
     }
 }

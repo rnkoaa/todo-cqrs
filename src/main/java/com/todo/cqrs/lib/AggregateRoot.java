@@ -18,8 +18,8 @@ public class AggregateRoot<T extends ValueId> {
         return uncommittedEvents;
     }
 
-    public void loadFromHistory(List<DomainEvent<T>> history) {
-        for (DomainEvent<T> event : history) {
+    public void loadFromHistory(List<DomainEvent> history) {
+        for (DomainEvent event : history) {
             applyChange(event, false);
         }
     }
@@ -44,17 +44,18 @@ public class AggregateRoot<T extends ValueId> {
         return timestamp;
     }
 
-    protected void applyChange(DomainEvent<T> event) {
+    protected void applyChange(DomainEvent event) {
         applyChange(event, true);
     }
 
-    private void applyChange(DomainEvent<T> event, boolean isNew) {
+    private void applyChange(DomainEvent event, boolean isNew) {
         updateMetadata(event);
         invokeHandlerMethod(event);
         if (isNew) uncommittedEvents.add(event);
     }
 
-    private void updateMetadata(DomainEvent<T> event) {
+    @SuppressWarnings("unchecked")
+    private void updateMetadata(DomainEvent event) {
         this.id = (T) event.getAggregateId();
         this.version = event.getVersion();
         this.timestamp = event.getTimestamp();
@@ -82,5 +83,9 @@ public class AggregateRoot<T extends ValueId> {
 
     public boolean hasUncommittedEvents() {
         return !uncommittedEvents.isEmpty();
+    }
+
+    public void markAsCommitted(){
+        getUncommittedEvents().clear();
     }
 }

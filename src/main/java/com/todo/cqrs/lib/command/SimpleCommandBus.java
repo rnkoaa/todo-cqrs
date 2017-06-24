@@ -24,7 +24,10 @@ public class SimpleCommandBus implements CommandBus {
 
     @Override
     public void register(Class<? extends Command> commandClass, CommandHandler handler) {
-        handlers.putIfAbsent(commandClass, handler);
+        //handlers.putIfAbsent(commandClass, handler);
+        if (handlers.putIfAbsent(commandClass, handler) != null) {
+            throw new IllegalArgumentException(String.format("A Handler already exists for the class '%s'", commandClass.getName()));
+        }
     }
 
     @SuppressWarnings("unchecked")

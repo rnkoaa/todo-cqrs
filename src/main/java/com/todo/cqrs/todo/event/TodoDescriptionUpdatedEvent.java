@@ -10,7 +10,7 @@ public class TodoDescriptionUpdatedEvent extends DomainEvent<TodoId> {
     private final String description;
 
     public TodoDescriptionUpdatedEvent(TodoId todoId, int version, String description, long timestamp) {
-        super(todoId, version, timestamp);
+        super(todoId, version, timestamp, TodoEvent.DESCRIPTION_UPDATED_EVENT);
         this.description = description;
     }
 

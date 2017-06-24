@@ -12,14 +12,10 @@ import com.todo.cqrs.lib.command.SimpleCommandBus;
 import com.todo.cqrs.lib.util.JSR310DateTimeSerializer;
 import com.todo.cqrs.lib.util.JSR310LocalDateDeserializer;
 import com.todo.cqrs.lib.util.JSR310LocalDateTimeConverters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InjectionPoint;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Scope;
 
 import java.time.*;
 
@@ -36,9 +32,10 @@ public class TodoCqrsApplication {
     }
 
     @Bean
-    public CommandBus commandBus(){
+    public CommandBus commandBus() {
         return new SimpleCommandBus("simpleCommandBus");
     }
+
     @Bean
     @Primary
     public ObjectMapper objectMapper() {
@@ -48,7 +45,8 @@ public class TodoCqrsApplication {
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         objectMapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-
+        objectMapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+        objectMapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
         JavaTimeModule module = new JavaTimeModule();
         module.addSerializer(OffsetDateTime.class, JSR310DateTimeSerializer.INSTANCE);
         module.addSerializer(ZonedDateTime.class, JSR310DateTimeSerializer.INSTANCE);

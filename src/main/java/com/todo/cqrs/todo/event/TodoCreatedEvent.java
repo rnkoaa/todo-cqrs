@@ -12,7 +12,7 @@ public class TodoCreatedEvent extends DomainEvent<TodoId> {
     private final String description;
 
     public TodoCreatedEvent(TodoId todoId, int nextVersion, String description, long timestamp) {
-        super(todoId, nextVersion, timestamp);
+        super(todoId, nextVersion, timestamp, TodoEvent.CREATED_EVENT);
         this.description = description;
     }
 

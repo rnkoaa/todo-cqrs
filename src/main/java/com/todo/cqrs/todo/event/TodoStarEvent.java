@@ -10,7 +10,7 @@ public class TodoStarEvent extends DomainEvent<TodoId> {
     private final boolean starred;
 
     public TodoStarEvent(TodoId todoId, int version, long timestamp, boolean starred) {
-        super(todoId, version, timestamp);
+        super(todoId, version, timestamp, TodoEvent.STARRED_EVENT);
         this.starred = starred;
     }
 

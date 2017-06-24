@@ -8,7 +8,7 @@ import com.todo.cqrs.todo.TodoId;
  */
 public class TodoCompletedEvent extends DomainEvent<TodoId> {
     public TodoCompletedEvent(TodoId todoId, int version, long timestamp) {
-        super(todoId, version, timestamp);
+        super(todoId, version, timestamp, TodoEvent.COMPLETED_EVENT);
 
     }
 }

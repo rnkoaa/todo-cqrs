@@ -8,7 +8,7 @@ import com.todo.cqrs.todo.TodoId;
  */
 public class TodoDeletedEvent extends DomainEvent<TodoId> {
     public TodoDeletedEvent(TodoId todoId, int version, long timestamp) {
-        super(todoId, version, timestamp);
+        super(todoId, version, timestamp, TodoEvent.DELETED_EVENT);
 
     }
 }
