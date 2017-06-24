@@ -1,4 +1,4 @@
-package com.todo.cqrs.todo.command.impl;
+package com.todo.cqrs.todo.command.handler;
 
 import com.todo.cqrs.lib.command.CommandBus;
 import com.todo.cqrs.lib.command.CommandHandler;
