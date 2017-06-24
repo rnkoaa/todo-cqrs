@@ -85,7 +85,7 @@ public class AggregateRoot<T extends ValueId> {
         return !uncommittedEvents.isEmpty();
     }
 
-    public void markAsCommitted(){
+    public void commitEvents() {
         getUncommittedEvents().clear();
     }
 }
