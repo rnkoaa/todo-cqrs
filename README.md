@@ -13,3 +13,5 @@ AggregateRoot
       onTitleUpdated
       onCompletedTodosRemoved
 ```
+
+https://www.thoughts-on-java.org/persist-postgresqls-jsonb-data-type-hibernate/
