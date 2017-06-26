@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  postgres:
+    container_name: postgres
+    build: .
+    ports:
+      - "5432:5432"
+    environment:
+      - "POSTGRES_USER=todocqrs_user"
+      - "POSTGRES_PASSWORD=todocqrs_user"
+    networks:
+      - backend_db
+    volumes:
+      - "pg-data-volume:/var/lib/postgresql/data"
+
+networks:
+  backend_db:
+    driver: bridge
+
+volumes:
+  pg-data-volume:
