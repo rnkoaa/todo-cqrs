@@ -1,8 +1,13 @@
 --liquibase formatted sql
 
 --changeset rnkoaa:1
-CREATE TABLE IF NOT EXISTS domain_event (
-  id         BIGSERIAL PRIMARY KEY NOT NULL,
+CREATE SCHEMA IF NOT EXISTS todocqrs;
+
+CREATE TABLE IF NOT EXISTS todocqrs.domain_event (
+  id         BIGINT PRIMARY KEY NOT NULL,
   aggregate_id VARCHAR(32)           NOT NULL,
-  event_details  JSONB          NOT NULL
+  event_details  JSONB          NOT NULL,
+  created_on TIMESTAMP,
+  updated_at TIMESTAMP,
+  version    INTEGER
   );
