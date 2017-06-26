@@ -7,19 +7,19 @@ import java.util.List;
 /**
  * Created on 6/21/2017.
  */
-public class AggregateRoot<T extends ValueId> {
-    private final List<DomainEvent> uncommittedEvents = new ArrayList<>();
+public class AggregateRoot<T extends DomainEvent> {
+    private final List<T> uncommittedEvents = new ArrayList<>();
 
-    private T id;
+    private String id;
     private int version = 0;
     private long timestamp = 0;
 
-    public List<DomainEvent> getUncommittedEvents() {
+    public List<T> getUncommittedEvents() {
         return uncommittedEvents;
     }
 
-    public void loadFromHistory(List<DomainEvent> history) {
-        for (DomainEvent event : history) {
+    public void loadFromHistory(List<T> history) {
+        for (T event : history) {
             applyChange(event, false);
         }
     }
@@ -32,7 +32,7 @@ public class AggregateRoot<T extends ValueId> {
         return System.currentTimeMillis();
     }
 
-    public T id() {
+    public String id() {
         return id;
     }
 
@@ -44,24 +44,24 @@ public class AggregateRoot<T extends ValueId> {
         return timestamp;
     }
 
-    protected void applyChange(DomainEvent event) {
+    protected void applyChange(T event) {
         applyChange(event, true);
     }
 
-    private void applyChange(DomainEvent event, boolean isNew) {
+    private void applyChange(T event, boolean isNew) {
         updateMetadata(event);
         invokeHandlerMethod(event);
         if (isNew) uncommittedEvents.add(event);
     }
 
     @SuppressWarnings("unchecked")
-    private void updateMetadata(DomainEvent event) {
-        this.id = (T) event.getAggregateId();
+    private void updateMetadata(T event) {
+        this.id = event.getAggregateId();
         this.version = event.getVersion();
         this.timestamp = event.getTimestamp();
     }
 
-    private void invokeHandlerMethod(DomainEvent event) {
+    private void invokeHandlerMethod(T event) {
         Method handlerMethod = getHandlerMethod(event);
         if (handlerMethod != null) {
             handlerMethod.setAccessible(true);
@@ -73,7 +73,7 @@ public class AggregateRoot<T extends ValueId> {
         }
     }
 
-    private Method getHandlerMethod(DomainEvent event) {
+    private Method getHandlerMethod(T event) {
         try {
             return getClass().getDeclaredMethod("handleEvent", event.getClass());
         } catch (NoSuchMethodException e) {

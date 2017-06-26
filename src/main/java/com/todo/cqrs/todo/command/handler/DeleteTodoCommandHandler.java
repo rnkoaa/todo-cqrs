@@ -30,7 +30,7 @@ public class DeleteTodoCommandHandler implements CommandHandler<DeleteTodoComman
 
     @Override
     public ResultValue handle(DeleteTodoCommand command) {
-        LOGGER.info("deleting todo description with a id: {}", command.getTodoId().id);
+        LOGGER.info("deleting todo description with a id: {}", command.getTodoId());
         Optional<TodoAggregate> todoAggregate = todoRepository.find(command.getTodoId());
 
         todoAggregate.ifPresent(existingTodoAggregate -> {

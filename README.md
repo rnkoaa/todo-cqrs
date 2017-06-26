@@ -15,3 +15,4 @@ AggregateRoot
 ```
 
 https://www.thoughts-on-java.org/persist-postgresqls-jsonb-data-type-hibernate/
+http://www.baeldung.com/jackson-inheritance

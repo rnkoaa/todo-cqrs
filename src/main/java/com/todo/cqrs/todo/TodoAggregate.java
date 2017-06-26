@@ -21,10 +21,10 @@ import java.util.Objects;
 @Data
 @Builder
 @AllArgsConstructor
-public class TodoAggregate extends AggregateRoot<TodoId> {
+public class TodoAggregate extends AggregateRoot<DomainEvent> {
 
     @JsonIgnore
-    private TodoId id;
+    private String id;
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
@@ -44,7 +44,7 @@ public class TodoAggregate extends AggregateRoot<TodoId> {
 
     @JsonProperty("id")
     public String getId() {
-        return id.id;
+        return id;
     }
 
     void handleEvent(TodoCreatedEvent event) {

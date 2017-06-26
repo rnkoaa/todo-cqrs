@@ -31,7 +31,7 @@ public class StarTodoCommandHandler implements CommandHandler<StarTodoCommand, R
 
     @Override
     public ResultValue handle(StarTodoCommand command) {
-        LOGGER.info("favoriting todo description with a id: {}", command.getTodoId().id);
+        LOGGER.info("favoriting todo description with a id: {}", command.getTodoId());
         Optional<TodoAggregate> todoAggregate = todoRepository.find(command.getTodoId());
 
         todoAggregate.ifPresent(existingTodoAggregate -> {

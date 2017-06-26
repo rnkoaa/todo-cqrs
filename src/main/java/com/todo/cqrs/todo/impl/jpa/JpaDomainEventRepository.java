@@ -1,7 +1,5 @@
 package com.todo.cqrs.todo.impl.jpa;
 
-import com.todo.cqrs.lib.DomainEvent;
-import com.todo.cqrs.todo.TodoRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 

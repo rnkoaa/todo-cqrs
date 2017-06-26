@@ -1,18 +1,15 @@
 package com.todo.cqrs.todo.impl.inmemory;
 
-import com.todo.cqrs.lib.AggregateRoot;
 import com.todo.cqrs.lib.DomainEvent;
 import com.todo.cqrs.lib.DomainEventStore;
-import com.todo.cqrs.lib.ValueId;
 import com.todo.cqrs.todo.TodoAggregate;
-import com.todo.cqrs.todo.TodoId;
 import com.todo.cqrs.todo.TodoRepository;
+import com.todo.cqrs.todo.impl.jpa.TodoDomainEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -45,20 +42,20 @@ public class InMemoryTodoRepositoryImpl implements TodoRepository {
             inMemoryTodoAggregates.add(todoAggregate);
     }
 
-    @Override
-    public Optional<TodoAggregate> find(TodoId todoId) {
-        return inMemoryTodoAggregates.stream()
-                .filter(todoAggregate1 -> todoAggregate1.getId().equals(todoId.id))
-                .findFirst();
+    /* @Override
+     public Optional<TodoAggregate> find(TodoId todoId) {
+         return inMemoryTodoAggregates.stream()
+                 .filter(todoAggregate1 -> todoAggregate1.getId().equals(todoId.id))
+                 .findFirst();
 
-    }
-
+     }
+ */
     @Override
     public Optional<TodoAggregate> find(String todoId) {
         return inMemoryTodoAggregates.stream()
                 .filter(todoAggregate1 -> todoAggregate1.getId().equals(todoId))
                 .map(todoAggregate -> TodoAggregate.builder()
-                        .id(todoAggregate.id())
+                        .id(todoAggregate.getId())
                         .description(todoAggregate.getDescription())
                         .deleted(todoAggregate.isDeleted())
                         .createdAt(todoAggregate.getCreatedAt())
@@ -70,18 +67,18 @@ public class InMemoryTodoRepositoryImpl implements TodoRepository {
     }
 
     @Override
-    public Optional<TodoAggregate> findFromHistory(TodoId todoId) {
-        Objects.requireNonNull(todoId, "There must be a valid todoid object");
-        return Optional.ofNullable(load(todoId, TodoAggregate.class));
+    public Optional<TodoAggregate> findFromHistory(String todoId) {
+        TodoAggregate todoAggregate = load(todoId, TodoAggregate.class);
+        return Optional.ofNullable(todoAggregate);
     }
 
-    @Override
+  /*  @Override
     public Optional<TodoAggregate> findFromHistory(String todoId) {
         Objects.requireNonNull(todoId, "There must be a valid todoid object");
 
-        TodoId id = new TodoId(todoId);
-        return findFromHistory(id);
-    }
+       *//* TodoId id = new TodoId(todoId);*//*
+        return findFromHistory(todoId);
+    }*/
 
     @Override
     public Optional<TodoAggregate> findWithEvents(String todoId) {
@@ -110,6 +107,8 @@ public class InMemoryTodoRepositoryImpl implements TodoRepository {
     public void save(TodoAggregate todoAggregate) {
         if (todoAggregate.hasUncommittedEvents()) {
             List<DomainEvent> uncommittedEvents = todoAggregate.getUncommittedEvents();
+            // List<TodoDomainEvent> todoDomainEvents = uncommittedEvents.stream().map(domainEvent -> (TodoDomainEvent) domainEvent).collect(Collectors.toList());
+
             domainEventStore.save(todoAggregate.id(), todoAggregate.getClass(), uncommittedEvents);
             //publish events
 
@@ -117,11 +116,14 @@ public class InMemoryTodoRepositoryImpl implements TodoRepository {
         }
     }
 
+
     @Override
-    public TodoAggregate load(TodoId id, Class<TodoAggregate> aggregateType) {
+    public TodoAggregate load(String id, Class<TodoAggregate> aggregateType) {
         try {
             TodoAggregate aggregateRoot = aggregateType.newInstance();
-            aggregateRoot.loadFromHistory(domainEventStore.loadEvents(id));
+            List<DomainEvent> domainEvents = domainEventStore.loadEvents(id);
+            //List<TodoDomainEvent> todoDomainEvents = domainEvents.stream().map(domainEvent -> (TodoDomainEvent) domainEvent).collect(Collectors.toList());
+            aggregateRoot.loadFromHistory(domainEvents);
             return aggregateRoot;
         } catch (IllegalArgumentException iae) {
             String message = format("Aggregate of type [%s] does not exist, ID: %s", aggregateType.getSimpleName(), id);

@@ -13,6 +13,6 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = false)
 @Builder
 public class DeleteTodoCommand extends Command {
-    private final TodoId todoId;
+    private final String todoId;
 }
 

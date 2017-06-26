@@ -24,7 +24,6 @@ public class SimpleCommandBus implements CommandBus {
 
     @Override
     public void register(Class<? extends Command> commandClass, CommandHandler handler) {
-        //handlers.putIfAbsent(commandClass, handler);
         if (handlers.putIfAbsent(commandClass, handler) != null) {
             throw new IllegalArgumentException(String.format("A Handler already exists for the class '%s'", commandClass.getName()));
         }
@@ -54,13 +53,4 @@ public class SimpleCommandBus implements CommandBus {
         }
         return (R) commandHandler.handle(command);
     }
-/*
-    @SuppressWarnings("unchecked")
-    @Override
-    public <C extends Command> void send(C command) {
-        Class clzz = command.getClass();
-        CommandHandler commandHandler = handlers.get(clzz);
-        if (commandHandler != null)
-            commandHandler.handle(command);
-    }*/
 }

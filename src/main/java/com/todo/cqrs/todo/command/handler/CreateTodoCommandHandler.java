@@ -28,7 +28,7 @@ public class CreateTodoCommandHandler implements CommandHandler<CreateTodoComman
 
     @Override
     public ResultValue handle(CreateTodoCommand command) {
-        LOGGER.info("Creating a new todo with a id: {}", command.getTodoId().id);
+        LOGGER.info("Creating a new todo with a id: {}", command.getTodoId());
 
         TodoAggregate todoAggregate = new TodoAggregate(command);
 

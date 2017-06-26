@@ -31,7 +31,7 @@ public class UnStarTodoCommandHandler implements CommandHandler<UnStarTodoComman
 
     @Override
     public ResultValue handle(UnStarTodoCommand command) {
-        LOGGER.info("unfavoriting todo description with a id: {}", command.getTodoId().id);
+        LOGGER.info("unfavoriting todo description with a id: {}", command.getTodoId());
         Optional<TodoAggregate> todoAggregate = todoRepository.find(command.getTodoId());
 
         todoAggregate.ifPresent(existingTodoAggregate -> {

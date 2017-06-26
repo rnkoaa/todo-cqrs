@@ -1,7 +1,7 @@
 package com.todo.cqrs.todo;
 
-import com.todo.cqrs.DomainEventService;
 import com.todo.cqrs.lib.DomainEvent;
+import com.todo.cqrs.lib.DomainEventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,9 +18,9 @@ import java.util.List;
 @RequestMapping("/events")
 public class DomainEventsController {
     private final Logger LOGGER = LoggerFactory.getLogger(DomainEventsController.class);
-    private final DomainEventService<TodoId> domainEventService;
+    private final DomainEventService domainEventService;
 
-    public DomainEventsController(DomainEventService<TodoId> domainEventService) {
+    public DomainEventsController(DomainEventService domainEventService) {
         this.domainEventService = domainEventService;
     }
 

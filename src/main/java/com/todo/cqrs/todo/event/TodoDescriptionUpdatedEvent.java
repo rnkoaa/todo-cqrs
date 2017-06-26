@@ -6,10 +6,10 @@ import com.todo.cqrs.todo.TodoId;
 /**
  * Created by 6/22/17.
  */
-public class TodoDescriptionUpdatedEvent extends DomainEvent<TodoId> {
+public class TodoDescriptionUpdatedEvent extends DomainEvent {
     private final String description;
 
-    public TodoDescriptionUpdatedEvent(TodoId todoId, int version, String description, long timestamp) {
+    public TodoDescriptionUpdatedEvent(String todoId, int version, String description, long timestamp) {
         super(todoId, version, timestamp, TodoEvent.DESCRIPTION_UPDATED_EVENT);
         this.description = description;
     }

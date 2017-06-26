@@ -13,5 +13,5 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 @Builder
 public class CompleteTodoCommand extends Command {
-    private final TodoId todoId;
+    private final String todoId;
 }

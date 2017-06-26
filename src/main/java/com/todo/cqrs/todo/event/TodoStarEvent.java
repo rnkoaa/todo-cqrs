@@ -6,10 +6,10 @@ import com.todo.cqrs.todo.TodoId;
 /**
  * Created by 6/22/17.
  */
-public class TodoStarEvent extends DomainEvent<TodoId> {
+public class TodoStarEvent extends DomainEvent {
     private final boolean starred;
 
-    public TodoStarEvent(TodoId todoId, int version, long timestamp, boolean starred) {
+    public TodoStarEvent(String todoId, int version, long timestamp, boolean starred) {
         super(todoId, version, timestamp, TodoEvent.STARRED_EVENT);
         this.starred = starred;
     }

@@ -32,7 +32,7 @@ public class CompleteTodoCommandHandler implements CommandHandler<CompleteTodoCo
 
     @Override
     public ResultValue handle(CompleteTodoCommand command) {
-        LOGGER.info("completing todo with a id: {}", command.getTodoId().id);
+        LOGGER.info("completing todo with a id: {}", command.getTodoId());
         Optional<TodoAggregate> todoAggregate = todoRepository.find(command.getTodoId());
 
         todoAggregate.ifPresent(existingTodoAggregate -> {

@@ -8,14 +8,14 @@ import java.util.Objects;
 /**
  * Created by 6/21/17.
  */
-public abstract class DomainEvent<T extends ValueId> implements Serializable {
+public abstract class DomainEvent implements Serializable {
 
-    private final T aggregateId;
+    private final String aggregateId;
     private final int version;
     private final long timestamp;
     private final TodoEvent eventType;
 
-    protected DomainEvent(T aggregateId, int version, long timestamp, TodoEvent eventType) {
+    protected DomainEvent(String aggregateId, int version, long timestamp, TodoEvent eventType) {
         this.aggregateId = aggregateId;
         this.version = version;
         this.timestamp = timestamp;
@@ -30,7 +30,7 @@ public abstract class DomainEvent<T extends ValueId> implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof DomainEvent)) return false;
-        DomainEvent<?> that = (DomainEvent<?>) o;
+        DomainEvent that = (DomainEvent) o;
         return version == that.version &&
                 timestamp == that.timestamp &&
                 Objects.equals(aggregateId, that.aggregateId);
@@ -41,7 +41,7 @@ public abstract class DomainEvent<T extends ValueId> implements Serializable {
         return Objects.hash(aggregateId, version, timestamp);
     }
 
-    public T getAggregateId() {
+    public String getAggregateId() {
         return aggregateId;
     }
 

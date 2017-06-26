@@ -1,6 +1,6 @@
 package com.todo.cqrs.todo.impl.inmemory;
 
-import com.todo.cqrs.DomainEventService;
+import com.todo.cqrs.lib.DomainEventService;
 import com.todo.cqrs.lib.DomainEvent;
 import com.todo.cqrs.lib.DomainEventStore;
 import com.todo.cqrs.todo.TodoId;
@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Service("domainEventService")
 @Profile("in-memory")
-public class InMemoryDomainEventService implements DomainEventService<TodoId> {
+public class InMemoryDomainEventService implements DomainEventService {
 
     private final DomainEventStore domainEventStore;
 
@@ -27,14 +27,14 @@ public class InMemoryDomainEventService implements DomainEventService<TodoId> {
         return domainEventStore.getAllEvents();
     }
 
-    @Override
+   /* @Override
     public List<DomainEvent> findByAggregate(String aggregateId) {
         TodoId todoId = new TodoId(aggregateId);
         return findByAggregate(todoId);
-    }
+    }*/
 
     @Override
-    public List<DomainEvent> findByAggregate(TodoId aggregateId) {
+    public List<DomainEvent> findByAggregate(String aggregateId) {
         return domainEventStore.loadEvents(aggregateId);
     }
 }

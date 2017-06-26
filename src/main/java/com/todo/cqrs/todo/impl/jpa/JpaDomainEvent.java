@@ -1,7 +1,11 @@
 package com.todo.cqrs.todo.impl.jpa;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.todo.cqrs.lib.DomainEvent;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +14,7 @@ import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -24,54 +29,53 @@ import java.time.LocalDateTime;
 public class JpaDomainEvent implements Serializable {
 
 
-    @Tolerate
-    public JpaDomainEvent() {
-
-    }
-
-    public JpaDomainEvent(DomainEvent domainEvent) {
-        this.domainEvent = domainEvent;
-    }
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", updatable = false, nullable = false)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,
+            generator = "domain_event_generator")
+    @SequenceGenerator(name = "domain_event_generator",
+            sequenceName = "domain_event_id_seq", allocationSize = 50)
+    @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
     @Column(name = "aggregate_id")
     private String aggregateId;
 
-    @Column(name = "event_details", nullable = false, updatable = false, insertable = true)
+
+    @Column(name = "event_details", nullable = false, updatable = false)
     @Type(type = "DomainEventJsonType")
-    private DomainEvent domainEvent;
+    private TodoDomainEvent domainEvent;
+
+    @Column(name = "event_type", nullable = false, updatable = false)
+    private String eventType;
 
     @JsonIgnore
     @CreatedDate
     @Column(name = "created_on", updatable = false)
     private LocalDateTime createdOn;
 
-    @JsonIgnore
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt = LocalDateTime.now();
 
-    @JsonIgnore
-    @Version
-    @Column(columnDefinition = "integer DEFAULT 0", nullable = false)
-    private Long version;
+    @Tolerate
+    public JpaDomainEvent() {
+
+    }
+
+    public JpaDomainEvent(TodoDomainEvent domainEvent) {
+        this.domainEvent = domainEvent;
+    }
 
     @PrePersist
     public void onSave() {
-        this.aggregateId = domainEvent.getAggregateId().id;
+        this.aggregateId = domainEvent.getAggregateId();
+        this.eventType = domainEvent.getEventType().name();
         this.setCreatedOn(LocalDateTime.now());
-        this.setUpdatedAt(LocalDateTime.now());
-        this.setVersion(1L);
     }
 
-    @PreUpdate
-    public void onUpdate() {
-        this.setUpdatedAt(LocalDateTime.now());
-        long updatedVersion = getVersion();
-        updatedVersion += 1;
-        this.setVersion(updatedVersion);
+    public static class JpaDomainEventDeserializer extends JsonDeserializer<JpaDomainEvent> {
+
+        @Override
+        public JpaDomainEvent deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            ObjectMapper mapper = (ObjectMapper) jp.getCodec();
+            return null;
+        }
     }
 }

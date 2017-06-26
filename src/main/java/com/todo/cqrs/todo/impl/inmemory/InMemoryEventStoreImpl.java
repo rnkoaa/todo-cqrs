@@ -19,10 +19,10 @@ import java.util.List;
 @Component("domainEventStore")
 @Profile("in-memory")
 public class InMemoryEventStoreImpl implements DomainEventStore {
-    private Multimap<ValueId, DomainEvent> domainEventsMap = LinkedHashMultimap.create();
+    private Multimap<String, DomainEvent> domainEventsMap = LinkedHashMultimap.create();
 
     @Override
-    public List<DomainEvent> loadEvents(ValueId id) {
+    public List<DomainEvent> loadEvents(String id) {
         Collection<DomainEvent> domainEvents = domainEventsMap.get(id);
         if (domainEvents.isEmpty())
             throw new IllegalArgumentException("Aggregate does not exist");
@@ -30,7 +30,7 @@ public class InMemoryEventStoreImpl implements DomainEventStore {
     }
 
     @Override
-    public synchronized void save(ValueId id, Class<? extends AggregateRoot> type, List<DomainEvent> events) {
+    public synchronized void save(String id, Class<? extends AggregateRoot> type, List<DomainEvent> events) {
         domainEventsMap.putAll(id, events);
     }
 

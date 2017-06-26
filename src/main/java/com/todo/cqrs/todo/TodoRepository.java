@@ -8,10 +8,10 @@ import java.util.Optional;
 /**
  * Created by 6/22/17.
  */
-public interface TodoRepository extends AggregateRepository<TodoAggregate, TodoId> {
+public interface TodoRepository extends AggregateRepository<TodoAggregate> {
     //void save(TodoAggregate todoAggregate);
 
-    Optional<TodoAggregate> find(TodoId todoId);
+ /*   Optional<TodoAggregate> find(String todoId);*/
 
     Optional<TodoAggregate> find(String todoId);
 
@@ -20,7 +20,7 @@ public interface TodoRepository extends AggregateRepository<TodoAggregate, TodoI
      * @param todoId
      * @return
      */
-    Optional<TodoAggregate> findFromHistory(TodoId todoId);
+  /*  Optional<TodoAggregate> findFromHistory(String todoId);*/
 
     /**
      * Loads an aggregate from its history

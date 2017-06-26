@@ -31,7 +31,7 @@ public class UpdateTodoDescriptionCommandHandler implements CommandHandler<Updat
 
     @Override
     public ResultValue handle(UpdateTodoDescriptionCommand command) {
-        LOGGER.info("updating todo description with a id: {}", command.getTodoId().id);
+        LOGGER.info("updating todo description with a id: {}", command.getTodoId());
         Optional<TodoAggregate> todoAggregate = todoRepository.find(command.getTodoId());
 
         todoAggregate.ifPresent(existingTodoAggregate -> {

@@ -13,6 +13,6 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 @Builder
 public class StarTodoCommand extends Command {
-    private final TodoId todoId;
+    private final String todoId;
 }
 

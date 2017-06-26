@@ -24,7 +24,7 @@ public class TodoCommandController {
 
     @PostMapping({"", "/"})
     public ResponseEntity<?> createTodo(@RequestBody TodoDto todoDto) {
-        TodoId todoId = TodoId.randomId();
+        String todoId = TodoId.randomId().id;
         CreateTodoCommand createTodoCommand = CreateTodoCommand
                 .builder()
                 .todoId(todoId)
@@ -32,7 +32,7 @@ public class TodoCommandController {
                 .build();
 
         commandGateway.send(createTodoCommand);
-        return ResponseEntity.created(URI.create("/todos/aggregates/" + todoId.id)).build();
+        return ResponseEntity.created(URI.create("/todos/aggregates/" + todoId)).build();
     }
 
     @PutMapping("/{todoId}/description")
@@ -41,7 +41,7 @@ public class TodoCommandController {
 
         UpdateTodoDescriptionCommand updateCommand = UpdateTodoDescriptionCommand.builder()
                 .description(todoDto.getDescription())
-                .todoId(new TodoId(todoId))
+                .todoId(todoId)
                 .build();
         commandGateway.send(updateCommand);
         return ResponseEntity.noContent().build();
@@ -51,7 +51,7 @@ public class TodoCommandController {
     public ResponseEntity<?> deleteTodo(@PathVariable("todoId") String todoId) {
 
         DeleteTodoCommand updateCommand = DeleteTodoCommand.builder()
-                .todoId(new TodoId(todoId))
+                .todoId(todoId)
                 .build();
         commandGateway.send(updateCommand);
         return ResponseEntity.noContent().build();
@@ -61,7 +61,7 @@ public class TodoCommandController {
     public ResponseEntity<?> favoriteTodo(@PathVariable("todoId") String todoId) {
 
         StarTodoCommand updateCommand = StarTodoCommand.builder()
-                .todoId(new TodoId(todoId))
+                .todoId(todoId)
                 .build();
         commandGateway.send(updateCommand);
         return ResponseEntity.noContent().build();
@@ -71,7 +71,7 @@ public class TodoCommandController {
     public ResponseEntity<?> removeTodoFavorite(@PathVariable("todoId") String todoId) {
 
         UnStarTodoCommand updateCommand = UnStarTodoCommand.builder()
-                .todoId(new TodoId(todoId))
+                .todoId(todoId)
                 .build();
         commandGateway.send(updateCommand);
         return ResponseEntity.noContent().build();

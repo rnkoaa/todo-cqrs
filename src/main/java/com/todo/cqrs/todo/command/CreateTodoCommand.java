@@ -13,6 +13,6 @@ import lombok.Value;
 @Value
 @Builder
 public class CreateTodoCommand extends Command {
-    private final TodoId todoId;
+    private final String todoId;
     private final String description;
 }
