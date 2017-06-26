@@ -1,4 +1,4 @@
-package com.todo.cqrs.todo.impl;
+package com.todo.cqrs.todo.impl.inmemory;
 
 import com.google.common.collect.*;
 import com.todo.cqrs.lib.AggregateRoot;
