@@ -3,11 +3,7 @@ package com.todo.cqrs.todo.event;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.todo.cqrs.lib.DomainEvent;
-import com.todo.cqrs.todo.TodoId;
-import com.todo.cqrs.todo.impl.jpa.TodoDomainEvent;
 import lombok.Builder;
-
-import java.time.LocalDateTime;
 
 /**
  * Created by 6/21/17.
@@ -27,7 +23,7 @@ public class TodoCreatedEvent extends DomainEvent {
     }
 
     @JsonPOJOBuilder(withPrefix = "")
-    public static final class TodoCreatedEventBuilder{
+    public static final class TodoCreatedEventBuilder {
         private String aggregateId;
         private int version;
         private long timestamp;
@@ -37,7 +33,9 @@ public class TodoCreatedEvent extends DomainEvent {
         public TodoCreatedEventBuilder aggregateId(String aggregateId) {
             this.aggregateId = aggregateId;
             return this;
-        } public TodoCreatedEventBuilder description(String description) {
+        }
+
+        public TodoCreatedEventBuilder description(String description) {
             this.description = description;
             return this;
         }

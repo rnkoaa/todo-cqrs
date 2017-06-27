@@ -6,10 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 /**
- * Created by 6/26/17.
+ * Created on 6/27/2017.
  */
 @Profile("jpa")
-public interface JpaDomainEventRepository extends JpaRepository<JpaDomainEvent, Long> {
-
-    List<JpaDomainEvent> findByAggregateId(String aggregateId);
+public interface RawEventRepository extends JpaRepository<RawEvent, Long> {
+    List<RawEvent> findByAggregateId(String aggregateId);
 }

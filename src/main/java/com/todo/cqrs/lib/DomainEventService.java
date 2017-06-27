@@ -7,9 +7,12 @@ import java.util.List;
  */
 public interface DomainEventService {
 
-    List<DomainEvent> findAll();
+    List<? extends DomainEvent> findAll();
 
-    List<DomainEvent> findByAggregate(String aggregateId);
+    DomainEvent save(DomainEvent domainEvent);
 
-    //List<DomainEvent> findByAggregate(String aggregateId);
+    List<? extends DomainEvent> save(List<? extends DomainEvent> domainEvents);
+
+    List<? extends DomainEvent> findByAggregate(String aggregateId);
+
 }

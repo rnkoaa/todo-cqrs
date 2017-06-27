@@ -25,12 +25,12 @@ public class DomainEventsController {
     }
 
     @GetMapping({"", "/"})
-    public List<DomainEvent> showAll() {
+    public List<? extends DomainEvent> showAll() {
         return domainEventService.findAll();
     }
 
     @GetMapping("/{aggregateId}")
-    public List<DomainEvent> showForAggregate(@PathVariable("aggregateId") String aggregateId) {
+    public List<? extends DomainEvent> showForAggregate(@PathVariable("aggregateId") String aggregateId) {
         return domainEventService.findByAggregate(aggregateId);
     }
 }

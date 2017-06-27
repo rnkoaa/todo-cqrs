@@ -1,6 +1,8 @@
 package com.todo.cqrs.todo.impl.jpa;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todo.cqrs.lib.DomainEvent;
+import com.todo.cqrs.lib.DomainEventService;
 import com.todo.cqrs.todo.TodoAggregate;
 import com.todo.cqrs.todo.TodoRepository;
 import org.springframework.context.annotation.Profile;
@@ -9,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -20,25 +21,22 @@ import static java.lang.String.format;
 @Profile("jpa")
 public class JpaTodoRepositoryImpl implements TodoRepository {
 
-    private final JpaDomainEventRepository domainEventRepository;
 
-    JpaTodoRepositoryImpl(JpaDomainEventRepository domainEventRepository) {
-        this.domainEventRepository = domainEventRepository;
+    private final ObjectMapper objectMapper;
+    private final DomainEventService domainEventService;
+
+    JpaTodoRepositoryImpl(ObjectMapper objectMapper, DomainEventService domainEventService) {
+        this.objectMapper = objectMapper;
+        this.domainEventService = domainEventService;
     }
 
     @Override
     public void save(TodoAggregate aggregateRoot) {
         //for now only save the events
         Objects.requireNonNull(aggregateRoot, "Aggregate root should not be null.");
-        List<JpaDomainEvent> unCommittedDomainEvents = aggregateRoot.getUncommittedEvents()
-                .stream()
-                .map(domainEvent -> JpaDomainEvent.builder()
-                        .domainEvent(new TodoDomainEvent(domainEvent))
-                        .aggregateId(domainEvent.getAggregateId())
-                        .build())
-                .collect(Collectors.toList());
+        List<DomainEvent> domainEvents = aggregateRoot.getUncommittedEvents();
+        domainEventService.save(domainEvents);
 
-        domainEventRepository.save(unCommittedDomainEvents);
 
         //handle saving aggregate root later.
     }
@@ -68,7 +66,20 @@ public class JpaTodoRepositoryImpl implements TodoRepository {
     public Optional<TodoAggregate> find(String todoId) {
         Objects.requireNonNull(todoId, "Id of Aggregate root should not be null.");
         TodoAggregate aggregateRoot = null;
-        List<JpaDomainEvent> jpaDomainEvents = domainEventRepository.findByAggregateId(todoId);
+
+        List<? extends DomainEvent> domainEvents = domainEventService.findByAggregate(todoId);
+        if(domainEvents.size() > 0){
+            try {
+                aggregateRoot = new TodoAggregate();
+                aggregateRoot.loadFromHistory((List<DomainEvent>) domainEvents);
+            } catch (IllegalArgumentException iae) {
+                String message = format("Aggregate of type [%s] does not exist, ID: %s", TodoAggregate.class.getSimpleName(), todoId);
+                throw new IllegalArgumentException(message);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        /*List<JpaDomainEvent> jpaDomainEvents = domainEventRepository.findByAggregateId(todoId);
         if (jpaDomainEvents.size() > 0) {
             List<DomainEvent> domainEvents = jpaDomainEvents.stream()
                     .map(jpaDomainEvent -> (DomainEvent) jpaDomainEvent.getDomainEvent())
@@ -83,7 +94,7 @@ public class JpaTodoRepositoryImpl implements TodoRepository {
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
-        }
+        }*/
         return Optional.ofNullable(aggregateRoot);
     }
 

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Created by 6/26/17.
@@ -16,10 +15,9 @@ import java.util.stream.Collectors;
 @Service("todoAggregateService")
 @Profile("jpa")
 public class JpaTodoAggregateServiceImpl implements TodoAggregateService {
-    private final JpaDomainEventRepository domainEventRepository;
 
-    public JpaTodoAggregateServiceImpl(JpaDomainEventRepository domainEventRepository) {
-        this.domainEventRepository = domainEventRepository;
+    public JpaTodoAggregateServiceImpl() {
+
     }
 
     @Override
@@ -34,10 +32,6 @@ public class JpaTodoAggregateServiceImpl implements TodoAggregateService {
 
     @Override
     public List<? extends DomainEvent> getEvents(String aggregateId) {
-        return domainEventRepository
-                .findByAggregateId(aggregateId)
-                .stream()
-                .map(JpaDomainEvent::getDomainEvent)
-                .collect(Collectors.toList());
+        return null;
     }
 }

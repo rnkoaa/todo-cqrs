@@ -1,11 +1,15 @@
 package com.todo.cqrs.todo.impl.jpa;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Strings;
 import com.todo.cqrs.lib.DomainEvent;
 import com.todo.cqrs.lib.DomainEventService;
+import com.todo.cqrs.todo.event.TodoEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -17,44 +21,83 @@ import java.util.stream.Collectors;
 @Profile("jpa")
 public class JpaDomainEventServiceImpl implements DomainEventService {
 
-    private final JpaDomainEventRepository domainEventRepository;
-    private final CustomDomainEventRepository customDomainEventRepository;
 
-    public JpaDomainEventServiceImpl(JpaDomainEventRepository domainEventRepository,
-                                     CustomDomainEventRepository customDomainEventRepository) {
-        this.domainEventRepository = domainEventRepository;
-        this.customDomainEventRepository = customDomainEventRepository;
+    private final ObjectMapper objectMapper;
+    private final RawEventRepository rawEventRepository;
+
+    public JpaDomainEventServiceImpl(ObjectMapper objectMapper,
+                                     RawEventRepository rawEventRepository) {
+        this.rawEventRepository = rawEventRepository;
+        this.objectMapper = objectMapper;
     }
 
     @Override
-    public List<DomainEvent> findAll() {
+    public List<? extends DomainEvent> findAll() {
 
-      /*  return domainEventRepository.findAll()
-                .stream()
-                .map(JpaDomainEvent::getDomainEvent)
-                .collect(Collectors.toList());*/
-        return customDomainEventRepository.findDomainEvents();
+        List<RawEvent> rawEvents = rawEventRepository.findAll();
+        return mapEvents(rawEvents);
     }
 
- /*   @Override
-    public List<DomainEvent> findByAggregate(String aggregateId) {
-        return domainEventRepository
-                .findByAggregateId(aggregateId)
-                .stream()
-                .map(JpaDomainEvent::getDomainEvent)
+    @Override
+    public DomainEvent save(DomainEvent domainEvent) {
+        if (domainEvent.getEventType() != null) {
+            try {
+                RawEvent rawEvent = domainEvent.getEventType().getEvent(domainEvent, objectMapper);
+                rawEventRepository.save(rawEvent);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+        return domainEvent;
+    }
+
+    private void updateBuilder(RawEvent.RawEventBuilder builder, DomainEvent domainEvent) throws JsonProcessingException {
+        builder.aggregateId(domainEvent.getAggregateId())
+                .eventType(domainEvent.getEventType().name())
+                .payload(objectMapper.writeValueAsString(domainEvent));
+    }
+
+    @Override
+    public List<? extends DomainEvent> save(List<? extends DomainEvent> domainEvents) {
+
+        List<RawEvent> rawEvents = domainEvents.stream()
+                .map(domainEvent -> {
+                    if (domainEvent.getEventType() != null) {
+                        try {
+                            return domainEvent.getEventType().getEvent(domainEvent, objectMapper);
+                        } catch (JsonProcessingException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    return null;
+                })
                 .collect(Collectors.toList());
-    }*/
+        rawEventRepository.save(rawEvents);
+        return domainEvents;
+    }
+
 
     @Override
-    public List<DomainEvent> findByAggregate(String todoId) {
-        Objects.requireNonNull(todoId, "Id for Aggregate root should not be null.");
-        if (Strings.isNullOrEmpty(todoId))
+    public List<? extends DomainEvent> findByAggregate(String aggregateId) {
+        Objects.requireNonNull(aggregateId, "Id for Aggregate root should not be null.");
+        if (Strings.isNullOrEmpty(aggregateId))
             throw new IllegalArgumentException("Id for Aggregate root should not be null.");
 
-        return domainEventRepository
-                .findByAggregateId(todoId)
-                .stream()
-                .map(JpaDomainEvent::getDomainEvent)
+        List<RawEvent> rawEvents = rawEventRepository.findByAggregateId(aggregateId);
+        return mapEvents(rawEvents);
+    }
+
+    private List<? extends DomainEvent> mapEvents(List<RawEvent> rawEvents) {
+        return rawEvents.stream()
+                .map(rawEvent -> {
+                    TodoEvent todoEvent = TodoEvent.valueOf(rawEvent.getEventType());
+                    try {
+                        return todoEvent.map(rawEvent, objectMapper);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                })
                 .collect(Collectors.toList());
     }
 }

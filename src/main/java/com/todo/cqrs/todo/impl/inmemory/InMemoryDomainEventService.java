@@ -23,9 +23,24 @@ public class InMemoryDomainEventService implements DomainEventService {
     }
 
     @Override
-    public List<DomainEvent> findAll() {
+    public List<? extends DomainEvent> findAll() {
         return domainEventStore.getAllEvents();
     }
+
+    @Override
+    public DomainEvent save(DomainEvent domainEvent) {
+        return null;
+    }
+
+    @Override
+    public List<? extends DomainEvent> save(List<? extends DomainEvent> domainEvents) {
+        return null;
+    }
+
+    /*@Override
+    public List<? extends DomainEvent> save(DomainEvent domainEvent) {
+        return null;
+    }*/
 
    /* @Override
     public List<DomainEvent> findByAggregate(String aggregateId) {
@@ -34,7 +49,7 @@ public class InMemoryDomainEventService implements DomainEventService {
     }*/
 
     @Override
-    public List<DomainEvent> findByAggregate(String aggregateId) {
+    public List<? extends DomainEvent> findByAggregate(String aggregateId) {
         return domainEventStore.loadEvents(aggregateId);
     }
 }

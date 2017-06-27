@@ -26,7 +26,7 @@ public class CustomDomainEventRepositoryImpl implements CustomDomainEventReposit
 
     @Override
     public List<DomainEvent> findDomainEvents(String aggregateId) {
-        String sql = "Select event_details from todocqrs.domain_event where aggregate_id = :aggregateId";
+      /*  String sql = "Select event_details from todocqrs.domain_event where aggregate_id = :aggregateId";
         Query namedQuery = entityManager.createNativeQuery(sql);
         namedQuery.setParameter("aggregateId", aggregateId);
 
@@ -34,21 +34,21 @@ public class CustomDomainEventRepositoryImpl implements CustomDomainEventReposit
         for (Object o : resultList) {
             String result = (String) o;
             System.out.println(result);
-        }
+        }*/
         //PreparedStatement statement = new
         return null;
     }
 
     @Override
     public List<DomainEvent> findDomainEvents() {
-        String sql = "Select event_details from todocqrs.domain_event";
+        /*String sql = "Select event_details from todocqrs.domain_event";
         Query namedQuery = entityManager.createNativeQuery(sql);
 
         List resultList = namedQuery.getResultList();
         for (Object o : resultList) {
             String result = (String) o;
             System.out.println(result);
-        }
+        }*/
         //PreparedStatement statement = new
         return null;
     }
