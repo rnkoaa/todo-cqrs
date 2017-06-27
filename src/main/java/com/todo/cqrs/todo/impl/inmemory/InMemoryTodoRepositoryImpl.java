@@ -4,7 +4,6 @@ import com.todo.cqrs.lib.DomainEvent;
 import com.todo.cqrs.lib.DomainEventStore;
 import com.todo.cqrs.todo.TodoAggregate;
 import com.todo.cqrs.todo.TodoRepository;
-import com.todo.cqrs.todo.impl.jpa.TodoDomainEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -42,14 +41,6 @@ public class InMemoryTodoRepositoryImpl implements TodoRepository {
             inMemoryTodoAggregates.add(todoAggregate);
     }
 
-    /* @Override
-     public Optional<TodoAggregate> find(TodoId todoId) {
-         return inMemoryTodoAggregates.stream()
-                 .filter(todoAggregate1 -> todoAggregate1.getId().equals(todoId.id))
-                 .findFirst();
-
-     }
- */
     @Override
     public Optional<TodoAggregate> find(String todoId) {
         return inMemoryTodoAggregates.stream()
@@ -71,14 +62,6 @@ public class InMemoryTodoRepositoryImpl implements TodoRepository {
         TodoAggregate todoAggregate = load(todoId, TodoAggregate.class);
         return Optional.ofNullable(todoAggregate);
     }
-
-  /*  @Override
-    public Optional<TodoAggregate> findFromHistory(String todoId) {
-        Objects.requireNonNull(todoId, "There must be a valid todoid object");
-
-       *//* TodoId id = new TodoId(todoId);*//*
-        return findFromHistory(todoId);
-    }*/
 
     @Override
     public Optional<TodoAggregate> findWithEvents(String todoId) {
@@ -107,7 +90,6 @@ public class InMemoryTodoRepositoryImpl implements TodoRepository {
     public void save(TodoAggregate todoAggregate) {
         if (todoAggregate.hasUncommittedEvents()) {
             List<DomainEvent> uncommittedEvents = todoAggregate.getUncommittedEvents();
-            // List<TodoDomainEvent> todoDomainEvents = uncommittedEvents.stream().map(domainEvent -> (TodoDomainEvent) domainEvent).collect(Collectors.toList());
 
             domainEventStore.save(todoAggregate.id(), todoAggregate.getClass(), uncommittedEvents);
             //publish events
@@ -122,7 +104,6 @@ public class InMemoryTodoRepositoryImpl implements TodoRepository {
         try {
             TodoAggregate aggregateRoot = aggregateType.newInstance();
             List<DomainEvent> domainEvents = domainEventStore.loadEvents(id);
-            //List<TodoDomainEvent> todoDomainEvents = domainEvents.stream().map(domainEvent -> (TodoDomainEvent) domainEvent).collect(Collectors.toList());
             aggregateRoot.loadFromHistory(domainEvents);
             return aggregateRoot;
         } catch (IllegalArgumentException iae) {

@@ -37,17 +37,6 @@ public class InMemoryDomainEventService implements DomainEventService {
         return null;
     }
 
-    /*@Override
-    public List<? extends DomainEvent> save(DomainEvent domainEvent) {
-        return null;
-    }*/
-
-   /* @Override
-    public List<DomainEvent> findByAggregate(String aggregateId) {
-        TodoId todoId = new TodoId(aggregateId);
-        return findByAggregate(todoId);
-    }*/
-
     @Override
     public List<? extends DomainEvent> findByAggregate(String aggregateId) {
         return domainEventStore.loadEvents(aggregateId);

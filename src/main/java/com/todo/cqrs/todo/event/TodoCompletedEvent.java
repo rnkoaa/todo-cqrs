@@ -21,7 +21,7 @@ public class TodoCompletedEvent extends DomainEvent {
         private String aggregateId;
         private int version;
         private long timestamp;
-        private String eventType;
+        private TodoEvent eventType;
 
 
         public TodoCompletedEventBuilder aggregateId(String aggregateId) {
@@ -40,7 +40,7 @@ public class TodoCompletedEvent extends DomainEvent {
             return this;
         }
 
-        public TodoCompletedEventBuilder eventType(String eventType) {
+        public TodoCompletedEventBuilder eventType(TodoEvent eventType) {
             this.eventType = eventType;
             return this;
         }

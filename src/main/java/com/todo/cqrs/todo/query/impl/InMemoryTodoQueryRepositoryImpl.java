@@ -18,7 +18,6 @@ import java.util.UUID;
 @Service("todoQueryRepository")
 @Profile("in-memory")
 public class InMemoryTodoQueryRepositoryImpl implements TodoQueryRepository {
-    //private AtomicLong atomicLong = new AtomicLong(0);
     private List<TodoQueryObject> todoQueryObjects;
 
     InMemoryTodoQueryRepositoryImpl() {

@@ -28,10 +28,6 @@ import java.time.*;
 //@ComponentScan
 public class TodoCqrsApplication extends SpringBootServletInitializer {
 
-  /*  public static void main(String[] args) {
-        SpringApplication.run(TodoCqrsApplication.class, args);
-    }*/
-
     public static void main(String[] args) {
         SpringApplication.run(TodoCqrsApplication.class);
     }

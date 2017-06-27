@@ -17,7 +17,7 @@ public enum TodoEvent {
     COMPLETED_EVENT("TodoCompletedEvent") {
         public RawEvent getEvent(DomainEvent domainEvent, ObjectMapper objectMapper) throws JsonProcessingException {
             TodoCompletedEvent completedEvent = (TodoCompletedEvent) domainEvent;
-            return new RawEvent(completedEvent.getAggregateId(), name(), objectMapper.writeValueAsString(completedEvent));
+            return new RawEvent(completedEvent.getAggregateId(), this, objectMapper.writeValueAsString(completedEvent));
         }
 
         @Override
@@ -32,7 +32,7 @@ public enum TodoEvent {
         @Override
         public RawEvent getEvent(DomainEvent domainEvent, ObjectMapper objectMapper) throws JsonProcessingException {
             TodoDeletedEvent deletedEvent = (TodoDeletedEvent) domainEvent;
-            return new RawEvent(deletedEvent.getAggregateId(), name(), objectMapper.writeValueAsString(deletedEvent));
+            return new RawEvent(deletedEvent.getAggregateId(), this, objectMapper.writeValueAsString(deletedEvent));
         }
 
         @Override
@@ -47,7 +47,7 @@ public enum TodoEvent {
         @Override
         public RawEvent getEvent(DomainEvent domainEvent, ObjectMapper objectMapper) throws JsonProcessingException {
             TodoStarEvent starEvent = (TodoStarEvent) domainEvent;
-            return new RawEvent(starEvent.getAggregateId(), name(), objectMapper.writeValueAsString(starEvent));
+            return new RawEvent(starEvent.getAggregateId(), this, objectMapper.writeValueAsString(starEvent));
         }
 
         @Override
@@ -62,7 +62,7 @@ public enum TodoEvent {
         @Override
         public RawEvent getEvent(DomainEvent domainEvent, ObjectMapper objectMapper) throws JsonProcessingException {
             TodoDescriptionUpdatedEvent descriptionUpdatedEvent = (TodoDescriptionUpdatedEvent) domainEvent;
-            return new RawEvent(descriptionUpdatedEvent.getAggregateId(), name(), objectMapper.writeValueAsString(descriptionUpdatedEvent));
+            return new RawEvent(descriptionUpdatedEvent.getAggregateId(), this, objectMapper.writeValueAsString(descriptionUpdatedEvent));
         }
 
         @Override
@@ -77,7 +77,7 @@ public enum TodoEvent {
         @Override
         public RawEvent getEvent(DomainEvent domainEvent, ObjectMapper objectMapper) throws JsonProcessingException {
             TodoCreatedEvent createdEvent = (TodoCreatedEvent) domainEvent;
-            return new RawEvent(createdEvent.getAggregateId(), getName(), objectMapper.writeValueAsString(createdEvent));
+            return new RawEvent(createdEvent.getAggregateId(), this, objectMapper.writeValueAsString(createdEvent));
         }
 
         @Override

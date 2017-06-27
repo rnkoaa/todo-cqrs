@@ -47,20 +47,6 @@ public class JpaTodoRepositoryImpl implements TodoRepository {
         return find(todoId).orElseThrow(() -> new IllegalArgumentException("Aggregate root does not exist"));
     }
 
- /*   @Override
-    public TodoAggregate load(TodoId todoId, Class<TodoAggregate> aggregateType) {
-        Objects.requireNonNull(todoId, "Id of Aggregate root should not be null.");
-        return find(todoId).orElseThrow(() -> new IllegalArgumentException("Aggregate root does not exist"));
-    }*/
-
-/*
-    @Override
-    public Optional<TodoAggregate> find(TodoId todoId) {
-        Objects.requireNonNull(todoId, "Id of Aggregate root should not be null.");
-        String aggregateId = todoId.id;
-        return find(aggregateId);
-    }
-*/
 
     @Override
     public Optional<TodoAggregate> find(String todoId) {
@@ -79,31 +65,8 @@ public class JpaTodoRepositoryImpl implements TodoRepository {
                 throw new RuntimeException(ex);
             }
         }
-        /*List<JpaDomainEvent> jpaDomainEvents = domainEventRepository.findByAggregateId(todoId);
-        if (jpaDomainEvents.size() > 0) {
-            List<DomainEvent> domainEvents = jpaDomainEvents.stream()
-                    .map(jpaDomainEvent -> (DomainEvent) jpaDomainEvent.getDomainEvent())
-                    .collect(Collectors.toList());
-
-            try {
-                aggregateRoot = new TodoAggregate();
-                aggregateRoot.loadFromHistory(domainEvents);
-            } catch (IllegalArgumentException iae) {
-                String message = format("Aggregate of type [%s] does not exist, ID: %s", TodoAggregate.class.getSimpleName(), todoId);
-                throw new IllegalArgumentException(message);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        }*/
         return Optional.ofNullable(aggregateRoot);
     }
-
-/*
-    @Override
-    public Optional<TodoAggregate> findFromHistory(TodoId todoId) {
-        return null;
-    }
-*/
 
     @Override
     public Optional<TodoAggregate> findFromHistory(String todoId) {

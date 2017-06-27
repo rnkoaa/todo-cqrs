@@ -53,7 +53,7 @@ public class JpaDomainEventServiceImpl implements DomainEventService {
 
     private void updateBuilder(RawEvent.RawEventBuilder builder, DomainEvent domainEvent) throws JsonProcessingException {
         builder.aggregateId(domainEvent.getAggregateId())
-                .eventType(domainEvent.getEventType().name())
+                .eventType(domainEvent.getEventType())
                 .payload(objectMapper.writeValueAsString(domainEvent));
     }
 
@@ -90,7 +90,7 @@ public class JpaDomainEventServiceImpl implements DomainEventService {
     private List<? extends DomainEvent> mapEvents(List<RawEvent> rawEvents) {
         return rawEvents.stream()
                 .map(rawEvent -> {
-                    TodoEvent todoEvent = TodoEvent.valueOf(rawEvent.getEventType());
+                    TodoEvent todoEvent = rawEvent.getEventType();
                     try {
                         return todoEvent.map(rawEvent, objectMapper);
                     } catch (IOException e) {

@@ -1,5 +1,6 @@
 package com.todo.cqrs.todo.impl.jpa;
 
+import com.todo.cqrs.todo.event.TodoEvent;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,8 +35,9 @@ public class RawEvent implements Serializable {
     @Column(name = "aggregate_id")
     private String aggregateId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "event_type", nullable = false, updatable = false)
-    private String eventType;
+    private TodoEvent eventType;
 
     @Column(name = "payload", nullable = false, updatable = false)
     private String payload;
@@ -44,7 +46,7 @@ public class RawEvent implements Serializable {
     RawEvent() {
     }
 
-    public RawEvent(String aggregateId, String eventType, String payload) {
+    public RawEvent(String aggregateId, TodoEvent eventType, String payload) {
         this.aggregateId = aggregateId;
         this.eventType = eventType;
         this.payload = payload;
