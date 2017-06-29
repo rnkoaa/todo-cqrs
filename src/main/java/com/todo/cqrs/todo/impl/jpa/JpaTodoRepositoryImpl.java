@@ -1,6 +1,5 @@
 package com.todo.cqrs.todo.impl.jpa;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.todo.cqrs.lib.DomainEvent;
 import com.todo.cqrs.lib.DomainEventService;
 import com.todo.cqrs.todo.TodoAggregate;
@@ -22,11 +21,9 @@ import static java.lang.String.format;
 public class JpaTodoRepositoryImpl implements TodoRepository {
 
 
-    private final ObjectMapper objectMapper;
     private final DomainEventService domainEventService;
 
-    JpaTodoRepositoryImpl(ObjectMapper objectMapper, DomainEventService domainEventService) {
-        this.objectMapper = objectMapper;
+    JpaTodoRepositoryImpl(DomainEventService domainEventService) {
         this.domainEventService = domainEventService;
     }
 
